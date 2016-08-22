@@ -173,6 +173,7 @@
                         directionsDisplay.setRouteIndex(index_route);
                     }
 
+                    /*https://duncan99.wordpress.com/2015/01/22/animated-paths-with-google-maps/*/
                     function setAnimatedRoute(pathCoords) {
                         var route = new google.maps.Polyline({
                             path: [],
