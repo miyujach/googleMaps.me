@@ -20,7 +20,15 @@
             (function(){
                 var styles = [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#444444"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#46bcec"},{"visibility":"on"}]}];
 
-                var googleMap = google_Map("AIzaSyDkQdWdHJofyWARkL_UrGZbDsnirQTrw3s", "#map", callback, {zoom: 6, styles: styles });
+                var googleMap = google_Map("AIzaSyDkQdWdHJofyWARkL_UrGZbDsnirQTrw3s",
+                                           "#map",
+                                           callback,
+                                           {
+                                                zoom: 8,
+                                                styles: styles,
+                                                mapTypeId: 'satellite',
+                                                tilt: 45   
+                                           });
 
                 var tab_localisation = [
                     {
@@ -38,35 +46,35 @@
 
 
                 function callback(gMap) {
-                    //                gMap.setMarkers(tab_localisation);
+                                    gMap.setMarkers(tab_localisation);
+                    gMap.setZoom(18);
                     gMap.direction("Toulouse, Midi-Pyrénées",
-                                   "Montpellier, Langedoc Roussillion",
+                                   "Ramonville, Midi-Pyrénées",
                                    {
-                                        animate: true,
-                                        speed: 5, 
-                                        followMarker: true,
-                                        strokeColor: 'red',
-                                        strokeOpacity: 0.5,
-                                        strokeWeight: 5,
-                                        editable: false,
-                                        icon : "http://maps.google.com/mapfiles/ms/micons/blue.png",
-                                    }, 
-                                   {
+                                         animateRoute : [
+                                            {
+                                                speed: 1, 
+                                                followMarker: true,
+                                                strokeColor: 'red',
+                                                strokeOpacity: 0.5,
+                                                strokeWeight: 5,
+                                                editable: false,
+                                                icon : "http://maps.google.com/mapfiles/ms/micons/blue.png",
+                                            }
+                                        ],
                                         travelMode: google.maps.TravelMode.DRIVING,
                                         provideRouteAlternatives : true,
                                         waypoints: [
                                             {
-                                                location:"Paris, ile-de-france",
+                                                location:"Balma, Midi-Pyrénées",
                                                 stopover:false
-                                            },{
-                                                location:"Lyon, Bouche-du-rhone",
-                                                stopover:true
                                             }
                                         ],
                                     }
                                   );
 
-                    //                gMap.setZoom(13);
+//                    gMap.setZoom(9);
+                    
                     //                gMap.setCenter(tab_localisation[0].lat, tab_localisation[0].lng);
                     //                
                     //                gMap.removeMarkers();

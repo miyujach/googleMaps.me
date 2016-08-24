@@ -43,7 +43,7 @@
             options: typeof options !== "undefined" ? options : {},
 
 
-            // Ajouts des marqueurs à la carte
+            //Ajouts des marqueurs à la carte
             setMarkers: function(locations, globalIcon) {
                 var marker,
                     i;
@@ -100,45 +100,53 @@
                 gMap.map.setZoom(zoom);
             },
 
-
-            /**
-            * Description for direction : Définition d'un trajet par l'utilisateur
-            * @private
-            * @method direction
-            * @param {Object} start : Départ du trajet
-            * @param {Object} destination : Arrivée du trajet
-            * @param {Object} options : Options supplémentaires du trajet
-            * @return {Object} description
-            */
-            direction: function(start, destination, animateRoute, options){
-                /**
-                {
-                    travelMode: [string],
-                    provideRouteAlternatives: [boolean],
-                }
-                */
+            
+            //Création d'un itinéraire
+            direction: function(start, destination, options){
 
                 var direction = {
                     origin: start,
                     destination: destination,
                 };
+                var optionsFiltered = {};
+
+                //Si l'utilisateur choisi d'activer l'animation du trajet
 
                 if(typeof options !== "undefined"){
-                    var settings = $.extend({}, direction, options);
+                    if(options.hasOwnProperty('animateRoute')){
+                        Object.keys(options).forEach(function(key, index) {
+                            // key: the name of the object key
+                            //console.debug("output : " + key+":"+options[key]+" -- ");
+                            if(key !== "animateRoute"){
+
+                                optionsFiltered[key] = options[key];
+
+                                if(typeof optionsFiltered !== "undefined"){
+                                    Object.keys(optionsFiltered).forEach(function(key, index) {
+                                        // key: the name of the object key
+                                        //console.debug("output optionsFiltered : " + key+":"+optionsFiltered[key]+" -- ");
+                                    });
+                                }
+                            }
+                        });
+
+                        var settings = $.extend({}, direction, optionsFiltered);
+                    }else{
+                        if(typeof options !== "undefined"){
+                            var settings = $.extend({}, direction, options);
+                        }
+                    }
                 }
-                if(typeof settings !== "undefined"){
-                    Object.keys(settings).forEach(function(key, index) {
-                        // key: the name of the object key
-                        console.debug(key+":"+settings[key]+" -- ");
-                    });
-                }
+
+
+
 
 
                 var directionsService = new google.maps.DirectionsService();
 
                 directionsService.route(settings, function(result, status) {
                     if (status == google.maps.DirectionsStatus.OK) {
-                        if(typeof animateRoute !== "undefined"){
+                        if(typeof options.animateRoute !== "undefined"){
                             setAnimatedRoute(result.routes[0].overview_path);
                         }else{
                             setStaticRoute(result);
@@ -175,40 +183,73 @@
 
                     /*https://duncan99.wordpress.com/2015/01/22/animated-paths-with-google-maps/*/
                     function setAnimatedRoute(pathCoords) {
-                        var route = new google.maps.Polyline({
-                            path: [],
-                            geodesic : typeof animateRoute.geodesic !== "undefined" ? animateRoute.geodesic : true,
-                            strokeColor: typeof animateRoute.strokeColor !== "undefined" ? animateRoute.strokeColor : '#0080ff',
-                            strokeOpacity: typeof animateRoute.strokeOpacity !== "undefined" ? animateRoute.strokeOpacity : 0.5,
-                            strokeWeight: typeof animateRoute.strokeWeight !== "undefined" ? animateRoute.strokeWeight : 3,
-                            editable: typeof animateRoute.editable !== "undefined" ? animateRoute.editable : false,
-                            map: gMap.map
-                        });
+                        //alert("options.animateRoute[0].strokeWeight : " + options.animateRoute.strokeWeight);
 
-                        var marker = new google.maps.Marker({map:gMap.map, icon: typeof animateRoute.icon !== "undefined" ? animateRoute.icon : ""});
-                        var speed = typeof animateRoute.speed !== "undefined" ? animateRoute.speed : 1;
-                        
-                        
-                        for (var i = 0; i < pathCoords.length; i++) {                
-                            setTimeout(function(coords) {
-                                route.getPath().push(coords);
+                        if(typeof options.animateRoute !== "undefined"){
+                            var route = new google.maps.Polyline({
+                                path: [],
+                                geodesic : typeof options.animateRoute[0].geodesic !== "undefined" ? options.animateRoute[0].geodesic : true,
+                                strokeColor: typeof options.animateRoute[0].strokeColor !== "undefined" ? options.animateRoute[0].strokeColor : '#0080ff',
+                                strokeOpacity: typeof options.animateRoute[0].strokeOpacity !== "undefined" ? options.animateRoute[0].strokeOpacity : 0.5,
+                                strokeWeight: typeof options.animateRoute[0].strokeWeight !== "undefined" ? options.animateRoute[0].strokeWeight : 3,
+                                editable: typeof options.animateRoute[0].editable !== "undefined" ? options.animateRoute[0].editable : false,
+                                map: gMap.map
+                            });
+
+                            var marker = new google.maps.Marker({map:gMap.map, icon: typeof options.animateRoute[0].icon !== "undefined" ? options.animateRoute[0].icon : ""});
+                            var speed = typeof options.animateRoute[0].speed !== "undefined" ? options.animateRoute[0].speed : 1;
+
+                            
+                            
+                            
+                            /**
+                                WORK IN PROGRESS HERE
+                                Rajouter des points dans les coordonnées afin de lisser le trajet
+                            **/
+                            
+                            for (var i = 0; i < pathCoords.length; i++) {
+                                console.log("Ligne "+i+ " : " + pathCoords[i].lat());
                                 
-                                marker.setPosition(coords);
-                                if(animateRoute.followMarker){
-                                    gMap.map.panTo(coords);
+                                if(i < pathCoords.length-1){
+                                    var difference_coords_lat = pathCoords[i].lat() - pathCoords[i+1].lat();
                                 }
                                 
-                            }, 100/speed * i, pathCoords[i]);
+                                if( difference_coords_lat < 0){
+                                    difference_coords_lat = -difference_coords_lat;
+                                }
+                                
+                                var val_test = 0.0002;
+                                if(difference_coords_lat > val_test){
+                                    console.debug("Alerte : Entre la ligne "+i+" et la ligne suivante : La différence ("+difference_coords_lat+") et suppérieure à " + val_test);
+                                }
+                                
+                                var difference_lat = pathCoords[i];
+                            }
+                            
+                            /**
+                                WORK IN PROGRESS HERE
+                                Rajouter des points dans les coordonnées afin de lisser le trajet
+                            **/
+
+                            
+                            
+                            for (var i = 0; i < pathCoords.length; i++) {      
+                                setTimeout(function(coords) {
+                                    route.getPath().push(coords);
+
+                                    marker.setPosition(coords);
+                                    if(options.animateRoute[0].followMarker){
+                                        gMap.map.panTo(coords);
+                                    }
+                                }, 1000/speed * i, pathCoords[i]);
+                                
+                            }
                         }
-                        
+
                     }
 
                 });
             },
-
-
-
-
 
 
         };
@@ -236,16 +277,29 @@
             }
 
 
-            gMap.map = new google.maps.Map(target, {
-                center: center,
-                zoom: typeof gMap.options.zoom !== "undefined" ? gMap.options.zoom : 7,
-                scrollwheel : typeof gMap.options.scrollwheel !== "undefined" ? gMap.options.scrollwheel : true,
-                mapTypeControl : typeof gMap.options.mapTypeControl !== "undefined" ? gMap.options.mapTypeControl : false,
-                mapTypeId: typeof gMap.options.MapTypeId !== "undefined" ? gMap.options.MapTypeId : google.maps.MapTypeId.ROADMAP,
-                styles : typeof gMap.options.styles !== "undefined" ? gMap.options.styles : [],
 
+            var defaultOptions = {
+                center: {lat:46.1860349, lng:2.6918861},
+                zoom: 6,
+                scrollwheel: true,
+                mapTypeControl: false,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                styles : [],
+            };
 
-            });                
+            if(typeof options !== "undefined"){
+                var settings = $.extend({}, defaultOptions, options);
+            }
+            if(typeof settings !== "undefined"){
+                Object.keys(settings).forEach(function(key, index) {
+                    // key: the name of the object key
+                    console.debug("output : " + key+":"+settings[key]+" -- ");
+
+                });
+            }
+
+            gMap.map = new google.maps.Map(target, settings);                
+
             gMap.infoWindows = new google.maps.InfoWindow();
 
             // Appelle le callback du index.html
