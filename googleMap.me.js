@@ -100,7 +100,7 @@
                 gMap.map.setZoom(zoom);
             },
 
-            
+
             //Création d'un itinéraire
             direction: function(start, destination, options){
 
@@ -199,49 +199,65 @@
                             var marker = new google.maps.Marker({map:gMap.map, icon: typeof options.animateRoute[0].icon !== "undefined" ? options.animateRoute[0].icon : ""});
                             var speed = typeof options.animateRoute[0].speed !== "undefined" ? options.animateRoute[0].speed : 1;
 
-                            
-                            
-                            
-                            /**
-                                WORK IN PROGRESS HERE
-                                Rajouter des points dans les coordonnées afin de lisser le trajet
-                            **/
-                            
-                            for (var i = 0; i < pathCoords.length; i++) {
-                                console.log("Ligne "+i+ " : " + pathCoords[i].lat());
-                                
-                                if(i < pathCoords.length-1){
-                                    var difference_coords_lat = pathCoords[i].lat() - pathCoords[i+1].lat();
-                                }
-                                
-                                if( difference_coords_lat < 0){
-                                    difference_coords_lat = -difference_coords_lat;
-                                }
-                                
-                                var val_test = 0.0002;
-                                if(difference_coords_lat > val_test){
-                                    console.debug("Alerte : Entre la ligne "+i+" et la ligne suivante : La différence ("+difference_coords_lat+") et suppérieure à " + val_test);
-                                }
-                                
-                                var difference_lat = pathCoords[i];
-                            }
-                            
+
+
+
                             /**
                                 WORK IN PROGRESS HERE
                                 Rajouter des points dans les coordonnées afin de lisser le trajet
                             **/
 
-                            
-                            
+//                            var distantance_lat_max = 0.0002;
+//                            var lat_lng_coords = [];
+//                            
+//                            for (var i = 0; i < pathCoords.length; i++) {
+//                                console.log("Ligne "+i+ " : " + pathCoords[i].lat());
+//
+//                                if(i < pathCoords.length-1){
+//                                    var difference_coords_lat = pathCoords[i].lat() - pathCoords[i+1].lat();
+//
+//                                    if(difference_coords_lat < 0){ difference_coords_lat = -difference_coords_lat;}
+//
+//                                    distantance_lat_max
+//                                    
+//                                    if(difference_coords_lat > distantance_lat_max){
+//                                        console.debug("Alerte : Entre la ligne "+i+" et la ligne suivante : La différence ("+difference_coords_lat+") et suppérieure à " + distantance_lat_max);
+//                                        var division_lat = Math.ceil(difference_coords_lat/distantance_lat_max);
+//                                        
+//                                        
+//                                    }
+//                                    
+//                                    for(var i=0; i<division_lat; i++){
+//                                        var new_lat_gap = difference_coords_lat / division_lat;
+//                                        console.log("new_lat_gap : "+ new_lat_gap);
+//                                        var lat_temp = pathCoords[i].lat() + new_lat_gap;
+//                                        lat_lng_coords.push({lat:lat_temp});
+//                                    }
+//                                    
+//                                    
+//                                }
+//
+//                                var difference_lat = pathCoords[i];
+//                            }
+
+                            /**
+                                WORK IN PROGRESS HERE
+                                Rajouter des points dans les coordonnées afin de lisser le trajet
+                            **/
+
+
+
                             for (var i = 0; i < pathCoords.length; i++) {      
                                 setTimeout(function(coords) {
+                                    console.log("coords : "+coords)
                                     route.getPath().push(coords);
 
                                     marker.setPosition(coords);
                                     if(options.animateRoute[0].followMarker){
                                         gMap.map.panTo(coords);
                                     }
-                                }, 1000/speed * i, pathCoords[i]);
+                                }, 100/speed * i, pathCoords[i]);
+
                                 
                             }
                         }
