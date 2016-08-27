@@ -56,7 +56,7 @@ function callback(gMap) {
     gMap.setMarkers(tab_localisation);
     gMap.setZoom(9);
 }
-  
+```  
   
 ```sh
 var tab_localisation = [
