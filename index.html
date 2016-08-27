@@ -11,7 +11,7 @@
         <div id="map" style="height:95%; width: 100%;"></div>
 
         <script src="jquery.js"></script>
-        <script src="googleMap.me.js"></script>
+        <script src="FastestWayGoogleMaps.js"></script>
 
 
 
@@ -20,14 +20,14 @@
             (function(){
                 var styles = [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#444444"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#46bcec"},{"visibility":"on"}]}];
 
-                var googleMap = google_Map("AIzaSyDkQdWdHJofyWARkL_UrGZbDsnirQTrw3s",
+                var googleMap = FastestWayGoogleMaps("AIzaSyDkQdWdHJofyWARkL_UrGZbDsnirQTrw3s",
                                            "#map",
                                            callback,
                                            {
                                                 zoom: 8,
                                                 styles: styles,
-                                                mapTypeId: 'satellite',
-                                                tilt: 45   
+                                                mapTypeId: 'roadmap'
+                                                //,tilt: 45,   
                                            });
 
                 var tab_localisation = [
@@ -47,14 +47,14 @@
 
                 function callback(gMap) {
                                     gMap.setMarkers(tab_localisation);
-                    gMap.setZoom(18);
+                    
                     gMap.direction("Toulouse, Midi-Pyrénées",
-                                   "Ramonville, Midi-Pyrénées",
+                                   "Bordeaux, Gironde",
                                    {
                                          animateRoute : [
                                             {
                                                 speed: 3, 
-                                                followMarker: true,
+                                                followMarker: false,
                                                 strokeColor: 'red',
                                                 strokeOpacity: 0.5,
                                                 strokeWeight: 5,
@@ -64,6 +64,7 @@
                                         ],
                                         travelMode: google.maps.TravelMode.DRIVING,
                                         provideRouteAlternatives : true,
+                                        optimizeWaypoints: true,
                                         waypoints: [
                                             {
                                                 location:"Balma, Midi-Pyrénées",
