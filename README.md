@@ -67,7 +67,7 @@ var tab_localisation = [
     },
     {
         desc: "Paris",
-        lat: 48.858859,
+        lat: 48.858859,##
         lng: 2.347557,
         icon: "marker.png"
     },
@@ -81,7 +81,7 @@ var styles = [{"featureType":"administrative","elementType":"labels.text.fill","
 
 ### Fonctions disponibles dans la fonction de rappel (callback)
 
-Ajout de marqueurs sur la carte
+##### # Ajout de marqueurs sur la carte
 ```sh
 var tab_localisation = [
     {
@@ -99,22 +99,22 @@ var tab_localisation = [
 gMap.setMarkers(tab_localisation);
 ```
 
-Suprimer les marqueurs de la carte
+##### # Suprimer les marqueurs de la carte
 ```sh
 gMap.removeMarkers()
 ```
 
-Zoom sur la carte (0 - 20)
+##### # Zoom sur la carte (0 - 20)
 ```sh
 gMap.setZoom(9);
 ```
 
-Se centrer sur la carte (latitude, longitude)
+##### # Se centrer sur la carte (latitude, longitude)
 ```sh
 gMap.setCenter(lat, lng);
 ```
 
-Réaliser un trajet STATIQUE sur la carte
+##### # Réaliser un trajet STATIQUE sur la carte
 ```sh
 gMap.direction("Toulouse, Midi-Pyrénées",
            "Bordeaux, Gironde",
@@ -132,7 +132,7 @@ gMap.direction("Toulouse, Midi-Pyrénées",
           );
 ```
 
-Réaliser un trajet AVEC ANIMATION sur la carte
+##### # Réaliser un trajet AVEC ANIMATION sur la carte
 ```sh
 gMap.direction("Toulouse, Midi-Pyrénées",
            "Bordeaux, Gironde",
