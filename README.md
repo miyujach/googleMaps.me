@@ -40,7 +40,7 @@ FastestWayGoogleMaps("API key", "selecteur", callback, options);
 ```
 
 ```sh
-var googleMap = FastestWayGoogleMaps("AIzaSyDkQdWdHJofyWARkL_UrGZbDsnirQTrw3s",
+FastestWayGoogleMaps("AIzaSyDkQdWdHJofyWARkL_UrGZbDsnirQTrw3s",
    "#map",
    callback,
    {
