@@ -1,4 +1,4 @@
-(function() {
+(function ($) {
     /*
         var tab_localisation = [
              {
@@ -21,9 +21,9 @@
             console.debug(gMap);
         }  
     */
-
-    window.FastestWayGoogleMaps = function(apiKey, target, callback, options) {
-        var target = $(target)[0];
+    "use strict";
+    window.FastestWayGoogleMaps = function (apiKey, target, callback, options) {
+        target = $(target)[0];
 
         var gMap = {
             map: {}, // Objet Google Maps
@@ -44,34 +44,35 @@
 
 
             //Ajouts des marqueurs à la carte
-            setMarkers: function(locations, globalIcon) {
+            setMarkers: function (locations, globalIcon) {
                 var marker,
-                    i;
+                    i,
+                    options = {};
 
 
                 for (i = 0; i < locations.length; i++) {
-                    var options = {
+                    options = {
                         position: new google.maps.LatLng(locations[i].lat, locations[i].lng),
                         map: gMap.map
                     };
 
                     // Si l'icône globale est définie
-                    if(typeof globalIcon !== "undefined") {
+                    if (typeof globalIcon !== "undefined") {
                         // Si un marqueur possède un icone, celui-ci est prioritaire
                         // sinon, c'est le marqueur global personnalisé qui est utilisé
                         options.icon = typeof locations[i].icon !== "undefined" ? locations[i].icon : globalIcon;
-                    } else if(typeof locations[i].icon !== "undefined") {
+                    } else if (typeof locations[i].icon !== "undefined") {
                         // Sinon je vérifie que le marqueur ne possède pas un icone personnalisée
                         options.icon = locations[i].icon;
                     }
 
                     marker = new google.maps.Marker(options);
 
-                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                        return function() {
+                    google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                        return function () {
                             gMap.infoWindows.setContent(locations[i].desc);
                             gMap.infoWindows.open(gMap.map, marker);
-                        }
+                        };
                     })(marker, i));
                     gMap.markers.push(marker);
                 }
@@ -79,7 +80,7 @@
 
 
             //Suppression des marqueurs de la carte
-            removeMarkers: function(){
+            removeMarkers: function () {
                 for (var i = 0; i <= gMap.markers.length-1; i++) {
                     gMap.markers[i].setMap(null);
                 }
@@ -107,17 +108,18 @@
                 var direction = {
                     origin: start,
                     destination: destination,
-                };
-                var optionsFiltered = {};
+                },
+                    optionsFiltered = {},
+                    defaultOptions = {};
 
                 if( typeof options === "undefined" ){
-                    var defaultOptions = {
+                    defaultOptions = {
                         travelMode: google.maps.TravelMode.DRIVING,
                     };
                     options = defaultOptions;
                 }else{
                     if(typeof options.travelMode === "undefined"){
-                        var defaultOptions = {
+                        defaultOptions = {
                             travelMode: google.maps.TravelMode.DRIVING
                         };
                         options = $.extend({}, defaultOptions, options);
