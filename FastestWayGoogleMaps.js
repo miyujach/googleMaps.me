@@ -20,6 +20,7 @@
             gMap.setMarkers(tab_localisation);
             console.debug(gMap);
         }  
+        
     */
     "use strict";
     window.FastestWayGoogleMaps = function (apiKey, target, callback, options) {
@@ -137,15 +138,14 @@
                             // key: the name of the object key
                             //console.debug("output : " + key+":"+options[key]+" -- ");
                             if(key !== "animateRoute" && key !== "fastestRoute" && key !== "shortestRoute"){
-
                                 optionsFiltered[key] = options[key];
 
-                                if(typeof optionsFiltered !== "undefined"){
-                                    Object.keys(optionsFiltered).forEach(function(key, index) {
-                                        // key: the name of the object key
-                                        //console.debug("output optionsFiltered : " + key+":"+optionsFiltered[key]+" -- ");
-                                    });
-                                }
+//                                if(typeof optionsFiltered !== "undefined"){
+//                                    Object.keys(optionsFiltered).forEach(function(key, index) {
+//                                         key: the name of the object key
+//                                        console.debug("output optionsFiltered : " + key+":"+optionsFiltered[key]+" -- ");
+//                                    });
+//                                }
                             }
                         });
 
@@ -255,95 +255,6 @@
                             var speed = typeof options.animateRoute[0].speed !== "undefined" ? options.animateRoute[0].speed : 1;
 
 
-
-
-                            /**
-                                WORK IN PROGRESS HERE
-                                Rajouter des points dans les coordonnées afin de lisser le trajet
-                            **/
-
-                            /*
-                                                        var distance_coords_max = 0.0002;
-                                                        var lat_lng_coords = [];
-                            
-                                                        
-                                                        for (var i = 0; i < pathCoords.length; i++) {
-                                                            console.log("Ligne "+i+ " lat : " + pathCoords[i].lat()+ " \\\\ lng : " + pathCoords[i].lng());
-                            
-                                                            if(i < pathCoords.length-1){
-                                                                var difference_coords_lat = pathCoords[i].lat() - pathCoords[i+1].lat();
-                                                                var difference_coords_lng = pathCoords[i].lng() - pathCoords[i+1].lng();
-                            
-                                                                if(difference_coords_lat < 0){ difference_coords_lat = -difference_coords_lat;}
-                                                                if(difference_coords_lng < 0){ difference_coords_lng = -difference_coords_lng;}
-                            
-                                                                
-                                                                lat_lng_coords.push({lat:pathCoords[i].lat(), lng:pathCoords[i].lng()});
-                            
-                                                                
-                                                                if(difference_coords_lat > distance_coords_max){
-                                                                    var division_lat = Math.ceil(difference_coords_lat/distance_coords_max);
-                                                                    console.debug("Alerte : Entre la ligne "+i+" et la ligne suivante : La différence (lat :"+difference_coords_lat+") et suppérieure à " + distance_coords_max + " \\\\ DIVISION LAT :" +division_lat);
-                                                                    
-                            
-                                                                    var lat_temp = 0, lng_temp = 0;
-                                                                    for(var y=0; y<division_lat-1; y++){
-                                                                        var new_lat_gap = difference_coords_lat / division_lat;
-                                                                        var new_lng_gap = difference_coords_lng / division_lat;
-                                                                        
-                                                                        console.log("new_lat_gap : "+ new_lat_gap);
-                                                                        
-                                                                        lat_temp = pathCoords[i].lat() + (new_lat_gap*(y+1));
-                                                                        lng_temp = pathCoords[i].lng() + (new_lng_gap*(y+1));
-                                                                        
-                                                                        
-                                                                        lat_lng_coords.push({lat:lat_temp, lng:lng_temp});
-                                                                    }
-                                                                    
-                                                                }
-                                                                else if(difference_coords_lng > distance_coords_max){
-                                                                    var division_lng = Math.ceil(difference_coords_lng/distance_coords_max);
-                                                                    console.debug("Alerte : Entre la ligne "+i+" et la ligne suivante : La différence (lng :"+difference_coords_lng+") et suppérieure à " + distance_coords_max + " \\\\ DIVISION LNG :" +division_lng);
-                                                                    
-                                                                                                            
-                                                                    var lat_temp = 0, lng_temp = 0;
-                                                                    for(var y=0; y<division_lng-1; y++){
-                                                                        var new_lat_gap = difference_coords_lat / division_lng;
-                                                                        var new_lng_gap = difference_coords_lng / division_lng;
-                                                                        
-                                                                        console.log("new_lng_gap : "+ new_lng_gap);
-                                                                        
-                                                                        lat_temp = pathCoords[i].lat() + (new_lat_gap*(y+1));
-                                                                        lng_temp = pathCoords[i].lng() + (new_lng_gap*(y+1));
-                                                                        
-                                                                        lat_lng_coords.push({lat:lat_temp, lng:lng_temp});
-                                                                    }
-                                                                    
-                                                                }
-                            
-                            
-                            
-                            
-                                                            }
-                            
-                                                        }
-                                                        
-                                                        for(var i=0; i < lat_lng_coords.length; i++){
-                                                            console.log("lat_lng_coords["+i+"] :" + lat_lng_coords[i].lat);
-                                                        }
-                                                        
-                                                        console.log("pathCoords[0].lat() : " + pathCoords[0].lat)
-                                                        
-                                                        */
-
-                            /**
-                                WORK IN PROGRESS HERE
-                                Rajouter des points dans les coordonnées afin de lisser le trajet
-                            **/
-
-
-
-                            //(43.55585000000001, 1.47648)
                             for (var i = 0; i < pathCoords.length; i++) {      
                                 setTimeout(function(coords) {
                                     console.log("coords : "+coords)
@@ -354,17 +265,11 @@
                                         gMap.map.panTo(coords);
                                     }
                                 }, 100/speed * i, pathCoords[i]);
-
-
                             }
                         }
-
                     }
-
                 });
             },
-
-
         };
 
 
@@ -376,8 +281,9 @@
             .done(function( script, textStatus ) {
             console.log( textStatus );
 
-            var center = {};  
-            var defaultOptions = {
+            var settings = null,
+                center = {},
+                defaultOptions = {
                 center: {lat:46.1860349, lng:2.6918861},
                 zoom: 6,
                 scrollwheel: true,
@@ -389,7 +295,7 @@
             
 
             if(typeof options !== "undefined"){
-                var settings = $.extend({}, defaultOptions, options);
+                settings = $.extend({}, defaultOptions, options);
                 
                 if(typeof gMap.options.lat !== "undefined") {center.lat = options.lat;}
                 if(typeof gMap.options.lng !== "undefined") {center.lng = options.lng;}
